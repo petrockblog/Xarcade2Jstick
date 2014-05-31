@@ -1,30 +1,21 @@
-/*
- * SNESDev - User-space driver for the RetroPie GPIO Adapter for the Raspberry Pi.
- *
- * (c) Copyright 2012-2013  Florian Müller (contact@petrockblock.com)
- *
- * SNESDev homepage: https://github.com/petrockblog/SNESDev-RPi
- *
- * Permission to use, copy, modify and distribute SNESDev in both binary and
- * source form, for non-commercial purposes, is hereby granted without fee,
- * providing that this license information and copyright notice appear with
- * all copies and any derived work.
- *
- * This software is provided 'as-is', without any express or implied
- * warranty. In no event shall the authors be held liable for any damages
- * arising from the use of this software.
- *
- * SNESDev is freeware for PERSONAL USE only. Commercial users should
- * seek permission of the copyright holders first. Commercial use includes
- * charging money for SNESDev or software derived from SNESDev.
- *
- * The copyright holders request that bug fixes and improvements to the code
- * should be forwarded to them so everyone can benefit from the modifications
- * in future versions.
- *
- * Raspberry Pi is a trademark of the Raspberry Pi Foundation.
- */
- 
+/* ======================================================================== */
+/*  This program is free software; you can redistribute it and/or modify    */
+/*  it under the terms of the GNU General Public License as published by    */
+/*  the Free Software Foundation; either version 2 of the License, or       */
+/*  (at your option) any later version.                                     */
+/*                                                                          */
+/*  This program is distributed in the hope that it will be useful,         */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of          */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU       */
+/*  General Public License for more details.                                */
+/*                                                                          */
+/*  You should have received a copy of the GNU General Public License       */
+/*  along with this program; if not, write to the Free Software             */
+/*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               */
+/* ======================================================================== */
+/*                 Copyright (c) 2014, Florian Müller                       */
+/* ======================================================================== */
+
 #include <linux/input.h>
 #include <linux/uinput.h>
 #include <fcntl.h>
