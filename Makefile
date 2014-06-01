@@ -1,24 +1,34 @@
-CC=gcc
-SRCDIR=src
-BUILDDIR=build
-CFLAGS=-c -Wall -O3
-LIBS=
-TARGET := Xardcade2Joystick
-SRCEXT := c
-SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-DEPS := $(OBJECTS:.o=.deps)
+package = Xarcade2Joystick
+version = 1.0
+tarname = $(package)
+distdir = $(tarname)-$(version)
 
-$(TARGET): $(OBJECTS)
-	@echo " Linking..."; $(CC) $^ $(LIBS) -o $(TARGET)
+all clean check install Xarcade2Joystick:
+	cd src && $(MAKE) $@
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-	@mkdir -p $(BUILDDIR)
-	@echo " CC $<"; $(CC) $(CFLAGS) -MD -MF $(@:.o=.deps) -c -o $@ $<
+dist: $(distdir).tar.gz
 
-clean:
-	@echo " Cleaning..."; $(RM) -r $(BUILDDIR) $(TARGET)
+distcheck: $(distdir).tar.gz
+	gzip -cd $(distdir).tar.gz | tar xvf -
+	cd $(distdir) && $(MAKE) all
+	cd $(distdir) && $(MAKE) check
+	cd $(distdir) && $(MAKE) clean
+	rm -rf $(distdir)
+	@echo "*** Package $(distdir.tar.gz is ready for distribution"
 
--include $(DEPS)
+$(distdir).tar.gz: $(distdir)
+	tar chof - $(distdir) | gzip -9 -c > $@
+	rm -rf $(distdir)
 
-.PHONY: clean
+$(distdir): FORCE
+	mkdir -p $(distdir)/src
+	cp Makefile $(distdir)
+	cp src/Makefile $(distdir)/src
+	cp src/*.c $(distdir)/src
+	cp src/*.h $(distdir)/src
+
+FORCE:
+	-rm $(distdir).tar.gz > /dev/null 2>&1
+	-rm -rf $(distdir) > /dev/null 2>&1
+
+.PHONY: FORCE all dist check clean dist distcheck install
