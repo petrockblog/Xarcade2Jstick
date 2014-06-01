@@ -5,20 +5,20 @@ CFLAGS=-c -Wall -O3
 LIBS=
 TARGET := Xardcade2Joystick
 SRCEXT := c
-SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+SOURCES := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 DEPS := $(OBJECTS:.o=.deps)
 
-all clean check $(TARGET): $(OBJECTS)
+all $(TARGET): $(OBJECTS)
 	@echo " Linking..."; $(CC) $^ $(LIBS) -o $(TARGET)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
 	@echo " CC $<"; $(CC) $(CFLAGS) -MD -MF $(@:.o=.deps) -c -o $@ $<
 
-check: all
-	# TO BE DONE, just a dummy for now
-	@echo "*** ALL TESTS PASSED ***"
+check:
+	# TO BE DONE! JUST A DUMMY FOR NOW
+	@echo "*** NO TESTS IMPLEMENTED ***"
 
 clean:
 	@echo " Cleaning..."; $(RM) -r $(BUILDDIR) $(TARGET)
@@ -26,8 +26,10 @@ clean:
 -include $(DEPS)
 
 install:
-	cp Xardcade2Joystick /usr/local/bin
-	chown root:root /usr/local/bin/Xardcade2Joystick
-	chmod +x /usr/local/bin/Xardcade2Joystick
+	install -d $(DESTDIR)$(bindir)
+	install -m 0755 Xardcade2Joystick $(DESTDIR)$(bindir)
 
-.PHONY: clean
+uninstall:
+	-rm $(DESTDIR)$(bindir)/Xardcade2Joystick
+
+.PHONY: clean install uninstall
