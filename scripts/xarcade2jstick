@@ -1,12 +1,12 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          Xarcade2Joystick
+# Provides:          xarcade2jstick
 # Required-Start:    
 # Required-Stop:     
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Xarcade2Joystick init script
-# Description:       Script to start Xarcade2Joystick daemon
+# Short-Description: xarcade2jstick init script
+# Description:       Script to start xarcade2jstick daemon
 ### END INIT INFO
 
 # Author: Florian Mueller <contact@petrockblock.com>
@@ -15,8 +15,8 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="Xarcade2Joystick daemon"
-NAME=Xarcade2Joystick
+DESC="xarcade2jstick daemon"
+NAME=xarcade2jstick
 DAEMON=/usr/local/bin/$NAME
 DAEMON_ARGS=""
 PIDFILE=/var/run/$NAME.pid

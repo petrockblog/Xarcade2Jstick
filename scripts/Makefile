@@ -1,9 +1,9 @@
 installservice:
-	install -m 0755 Xarcade2Joystick /etc/init.d
-	update-rc.d Xarcade2Joystick defaults
-	/etc/init.d/Xarcade2Joystick start
+	install -m 0755 xarcade2jstick /etc/init.d
+	update-rc.d xarcade2jstick defaults
+	/etc/init.d/xarcade2jstick start
 
 uninstallservice:
-	/etc/init.d/Xarcade2Joystick stop
-	update-rc.d Xarcade2Joystick remove
-	-rm /etc/init.d/Xarcade2Joystick
+	/etc/init.d/xarcade2jstick stop
+	update-rc.d xarcade2jstick remove
+	-rm /etc/init.d/xarcade2jstick

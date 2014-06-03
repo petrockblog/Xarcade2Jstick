@@ -30,6 +30,7 @@
 #include <sys/time.h>
 #include <termios.h>
 #include <signal.h>
+#include <time.h>
 #include "uinput_gamepad.h"
 #include "uinput_kbd.h"
 
@@ -72,10 +73,13 @@ int main(int argc, char* argv[]) {
 	int size = sizeof(struct input_event);
 	int rd, ctr;
 	char keyStates[256];
+	
+// 	while (fevdev == -1) {
+		fevdev = findXarcadeDevice(result, fevdev);
+//		sleep(500);
+//	}
 
-	fevdev = findXarcadeDevice(result, fevdev);
-
-	printf("Getting exclusive access: ");
+	printf("[Xarcade2Joystick] Getting exclusive access: ");
 	result = ioctl(fevdev, EVIOCGRAB, 1);
 	printf("%s\n", (result == 0) ? "SUCCESS" : "FAILURE");
 	if (result != 0) {
@@ -243,7 +247,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 		}
-
+//		sleep(20);
 	}
 
 	printf("Exiting.\n");

@@ -3,7 +3,7 @@ SRCDIR=.
 BUILDDIR=../build
 CFLAGS=-c -Wall -O3
 LIBS=
-TARGET := Xardcade2Joystick
+TARGET := xarcade2jstick
 SRCEXT := c
 SOURCES := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
@@ -27,9 +27,9 @@ clean:
 
 install:
 	install -d $(DESTDIR)$(bindir)
-	install -m 0755 Xardcade2Joystick $(DESTDIR)$(bindir)
+	install -m 0755 $(TARGET) $(DESTDIR)$(bindir)
 
 uninstall:
-	-rm $(DESTDIR)$(bindir)/Xardcade2Joystick
+	-rm $(DESTDIR)$(bindir)/$(TARGET)
 
 .PHONY: clean install uninstall
