@@ -9,7 +9,7 @@ _Xarcade2Jstick_ was originally written as a supplementary tool for the [RetroPi
 
 If you would like to download the current version of _Xarcade2Jstick_ from [its Github repository](https://github.com/petrockblog/Xarcade2Joystick), you can use this command:
 ```bash
-git clone https://github.com/petrockblog/Xarcade2Joystick
+git clone https://github.com/petrockblog/Xarcade2Jstick
 ```
 
 ## Building and Installation
