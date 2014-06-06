@@ -1,6 +1,50 @@
 Xarcade2Joystick
 ================
 
-This user-space driver maps the Xarcade Tankstick to two game pads
+_Xarcade2Jstick_ exclusively captures the keyboard events of the __Xarcade Tankstick__ and maps these events to corresponding events on two virtual game pad devices.
 
-This project needs more documentation ...
+_Xarcade2Jstick_ was originally written as a supplementary tool for the [RetroPie Project](http://blog.petrockblock.com/retropie/). Using this tool allows the usage of the auto-config capability of [RetroArch](http://themaister.net/retroarch.html), a central component of a RetroPie installation.
+
+## Downloading
+
+If you would like to download the current version of _Xarcade2Jstick_ from [its Github repository](https://github.com/petrockblog/Xarcade2Joystick), you can use this command:
+```bash
+git clone 
+```
+
+## Building and Installation
+
+To build Xarcade2Jstick follow these commands:
+```bash
+cd Xarcade2Jstick
+make
+```
+
+If everything went fine you can install with the command
+```bash
+sudo make install
+```
+
+## Installation as Service
+
+You can install _Xarcade2Jstick_ as daemon with this command:
+```bash
+sudo make installservice
+```
+
+## Uninstalling the service and/or the binary
+
+You can uninstall the daemon with this command:
+```bash
+sudo make uninstallservice
+```
+
+You can uninstall the binary with this command:
+```bash
+sudo make uninstall
+```
+
+<br><br>
+__Have fun!__
+
+-Florian [petrockblock.com](http://blog.petrockblock.com)
