@@ -1,4 +1,4 @@
-package = Xarcade2Joystick
+package = Xarcade2Jstick
 version = 1.0
 tarname = $(package)
 distdir = $(tarname)-$(version)
@@ -12,7 +12,7 @@ export exec_prefix
 export bindir
 export sysconfdir
 
-all clean check install uninstall Xarcade2Joystick:
+all clean check install uninstall Xarcade2Jstick:
 	cd src && $(MAKE) $@
 
 installservice uninstallservice:
