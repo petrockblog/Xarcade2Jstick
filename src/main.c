@@ -13,7 +13,7 @@
 /*  along with this program; if not, write to the Free Software             */
 /*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               */
 /* ======================================================================== */
-/*                 Copyright (c) 2014, Florian Müller                       */
+/*                 Copyright (c) 2014, Florian Mueller                      */
 /* ======================================================================== */
 
 #include <stdio.h>
@@ -48,17 +48,16 @@ int main(int argc, char* argv[]) {
 	int result = 0;
 	int rd, ctr;
 	char keyStates[256];
-	
+
+	uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE);
+	uinput_gpad_open(&uinp_gpads[1], UINPUT_GPAD_TYPE_XARCADE);
+	uinput_kbd_open(&uinp_kbd);
 	printf("[Xarcade2Joystick] Getting exclusive access: ");
-	result = uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE);
+	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
 	printf("%s\n", (result == 0) ? "SUCCESS" : "FAILURE");
 	if (result != 0) {
 		exit(-1);
 	}
-
-	uinput_gpad_open(&uinp_gpads[1], UINPUT_GPAD_TYPE_XARCADE);
-	uinput_kbd_open(&uinp_kbd);
-	input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
 
 	while (1) {
 		rd = input_xarcade_read(&xarcdev);
@@ -80,36 +79,36 @@ int main(int argc, char* argv[]) {
 				/* ----------------  Player 1 controls ------------------- */
 				/* buttons */
 				case 29:
-					uinput_gpad_write(&uinp_gpads[0], BTN_A, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[0], BTN_A,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 56:
-					uinput_gpad_write(&uinp_gpads[0], BTN_B, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[0], BTN_B,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 57:
-					uinput_gpad_write(&uinp_gpads[0], BTN_C, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[0], BTN_C,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 42:
-					uinput_gpad_write(&uinp_gpads[0], BTN_X, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[0], BTN_X,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 44:
-					uinput_gpad_write(&uinp_gpads[0], BTN_Y, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[0], BTN_Y,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 45:
-					uinput_gpad_write(&uinp_gpads[0], BTN_Z, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[0], BTN_Z,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 46:
-					uinput_gpad_write(&uinp_gpads[0], BTN_TL, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[0], BTN_TL,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 6:
-					uinput_gpad_write(&uinp_gpads[0], BTN_TR, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[0], BTN_TR,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 2:
 					uinput_gpad_write(&uinp_gpads[0], BTN_START,
@@ -141,36 +140,36 @@ int main(int argc, char* argv[]) {
 					/* ----------------  Player 2 controls ------------------- */
 					/* buttons */
 				case 30:
-					uinput_gpad_write(&uinp_gpads[1], BTN_A, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[1], BTN_A,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 31:
-					uinput_gpad_write(&uinp_gpads[1], BTN_B, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[1], BTN_B,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 16:
-					uinput_gpad_write(&uinp_gpads[1], BTN_C, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[1], BTN_C,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 17:
-					uinput_gpad_write(&uinp_gpads[1], BTN_X, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[1], BTN_X,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 18:
-					uinput_gpad_write(&uinp_gpads[1], BTN_Y, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[1], BTN_Y,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 26:
-					uinput_gpad_write(&uinp_gpads[1], BTN_Z, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[1], BTN_Z,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 27:
-					uinput_gpad_write(&uinp_gpads[1], BTN_TL, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[1], BTN_TL,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 7:
-					uinput_gpad_write(&uinp_gpads[1], BTN_TR, xarcdev.ev[ctr].value > 0,
-							EV_KEY);
+					uinput_gpad_write(&uinp_gpads[1], BTN_TR,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case 3:
 					uinput_gpad_write(&uinp_gpads[1], BTN_START,

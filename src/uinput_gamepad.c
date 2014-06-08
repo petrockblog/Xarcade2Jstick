@@ -13,7 +13,7 @@
 /*  along with this program; if not, write to the Free Software             */
 /*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               */
 /* ======================================================================== */
-/*                 Copyright (c) 2014, Florian Müller                       */
+/*                 Copyright (c) 2014, Florian Mueller                      */
 /* ======================================================================== */
 
 #include <linux/input.h>
@@ -26,7 +26,8 @@
 #include "uinput_gamepad.h"
 
 /* sends a key event to the virtual device */
-static void send_key_event(int fd, unsigned int keycode, int keyvalue, unsigned int evtype) {
+static void send_key_event(int fd, unsigned int keycode, int keyvalue,
+		unsigned int evtype) {
 	struct input_event event;
 	gettimeofday(&event.time, NULL);
 
@@ -58,7 +59,8 @@ int16_t uinput_gpad_open(UINP_GPAD_DEV* const gpad, UINPUT_GPAD_TYPE_E type) {
 
 	struct uinput_user_dev uinp;
 	memset(&uinp, 0, sizeof(uinp));
-	strncpy(uinp.name, "Xarcade-to-Gamepad Device", strlen("Xarcade-to-Gamepad Device"));
+	strncpy(uinp.name, "Xarcade-to-Gamepad Device",
+			strlen("Xarcade-to-Gamepad Device"));
 	uinp.id.version = 4;
 	uinp.id.bustype = BUS_USB;
 	uinp.id.product = 1;
@@ -108,7 +110,8 @@ int16_t uinput_gpad_close(UINP_GPAD_DEV* const gpad) {
 }
 
 /* sends a key event to the virtual device */
-int16_t uinput_gpad_write(UINP_GPAD_DEV* const gpad, uint16_t keycode, int16_t keyvalue, uint16_t evtype) {
+int16_t uinput_gpad_write(UINP_GPAD_DEV* const gpad, uint16_t keycode,
+		int16_t keyvalue, uint16_t evtype) {
 	struct input_event event;
 	gettimeofday(&event.time, NULL);
 

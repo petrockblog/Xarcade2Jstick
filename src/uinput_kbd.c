@@ -13,7 +13,7 @@
 /*  along with this program; if not, write to the Free Software             */
 /*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               */
 /* ======================================================================== */
-/*                 Copyright (c) 2014, Florian Müller                       */
+/*                 Copyright (c) 2014, Florian Mueller                      */
 /* ======================================================================== */
 
 #include <linux/input.h>
@@ -25,10 +25,8 @@
 
 #include "uinput_kbd.h"
 
-
 /* Setup the uinput keyboard device */
-int16_t uinput_kbd_open(UINP_KBD_DEV* const kbd)
-{
+int16_t uinput_kbd_open(UINP_KBD_DEV* const kbd) {
 	kbd->fd = open("/dev/uinput", O_WRONLY | O_NDELAY);
 	if (kbd->fd == 0) {
 		printf("Unable to open /dev/uinput\n");
@@ -37,7 +35,8 @@ int16_t uinput_kbd_open(UINP_KBD_DEV* const kbd)
 
 	struct uinput_user_dev uinp;
 	memset(&uinp, 0, sizeof(uinp));
-	strncpy(uinp.name, "SNES-to-Keyboard Device", strlen("SNES-to-Keyboard Device"));
+	strncpy(uinp.name, "SNES-to-Keyboard Device",
+			strlen("SNES-to-Keyboard Device"));
 	uinp.id.version = 4;
 	uinp.id.bustype = BUS_USB;
 	uinp.id.product = 1;
@@ -62,15 +61,14 @@ int16_t uinput_kbd_open(UINP_KBD_DEV* const kbd)
 	return kbd->fd;
 }
 
-int16_t uinput_kbd_close  (UINP_KBD_DEV* const kbd)
-{
+int16_t uinput_kbd_close(UINP_KBD_DEV* const kbd) {
 	ioctl(kbd->fd, UI_DEV_DESTROY);
 	return close(kbd->fd);
 }
 
 /* sends a key event to the virtual device */
-int16_t uinput_kbd_write(UINP_KBD_DEV* const kbd, unsigned int keycode, int keyvalue, unsigned int evtype)
-{
+int16_t uinput_kbd_write(UINP_KBD_DEV* const kbd, unsigned int keycode,
+		int keyvalue, unsigned int evtype) {
 	struct input_event event;
 	gettimeofday(&event.time, NULL);
 

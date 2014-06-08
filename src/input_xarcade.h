@@ -13,7 +13,7 @@
 /*  along with this program; if not, write to the Free Software             */
 /*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               */
 /* ======================================================================== */
-/*                 Copyright (c) 2014, Florian Müller                       */
+/*                 Copyright (c) 2014, Florian Mueller                      */
 /* ======================================================================== */
 
 #ifndef INPUT_XARCADE_H_
@@ -30,14 +30,13 @@ typedef enum {
 	INPUT_XARC_TYPE_TANKSTICK = 0
 } INPUT_XARC_TYPE_E;
 
-typedef struct  {
-	int16_t fevdev;
+typedef struct {
+	int fevdev;
 	struct input_event ev[64];
 } INP_XARC_DEV;
 
-
-int16_t input_xarcade_open  (INP_XARC_DEV* const xdev, INPUT_XARC_TYPE_E type);
-int16_t input_xarcade_close (INP_XARC_DEV* const xdev);
-int16_t input_xarcade_read  (INP_XARC_DEV* const xdev);
+int16_t input_xarcade_open(INP_XARC_DEV* const xdev, INPUT_XARC_TYPE_E type);
+int16_t input_xarcade_close(INP_XARC_DEV* const xdev);
+int16_t input_xarcade_read(INP_XARC_DEV* const xdev);
 
 #endif /* INPUT_XARCADE_H_ */

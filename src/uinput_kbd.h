@@ -13,20 +13,21 @@
 /*  along with this program; if not, write to the Free Software             */
 /*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               */
 /* ======================================================================== */
-/*                 Copyright (c) 2014, Florian Müller                       */
+/*                 Copyright (c) 2014, Florian Mueller                      */
 /* ======================================================================== */
 
 #ifndef UINPUT_KBD_H_
 #define UINPUT_KBD_H_
 
- #include <stdint.h>
+#include <stdint.h>
 
 typedef struct {
 	int16_t fd;
 } UINP_KBD_DEV;
 
-int16_t uinput_kbd_open   (UINP_KBD_DEV* const kbd);
-int16_t uinput_kbd_close  (UINP_KBD_DEV* const kbd);
-int16_t uinput_kbd_write  (UINP_KBD_DEV* const kbd, unsigned int keycode, int keyvalue, unsigned int evtype);
+int16_t uinput_kbd_open(UINP_KBD_DEV* const kbd);
+int16_t uinput_kbd_close(UINP_KBD_DEV* const kbd);
+int16_t uinput_kbd_write(UINP_KBD_DEV* const kbd, unsigned int keycode,
+		int keyvalue, unsigned int evtype);
 
 #endif /* UINPUT_KBD_H_ */
