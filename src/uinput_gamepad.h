@@ -28,7 +28,7 @@ typedef enum {
 } UINPUT_GPAD_TYPE_E;
 
 typedef struct {
-	int16_t fd;
+	int fd;
 	int16_t state;
 } UINP_GPAD_DEV;
 

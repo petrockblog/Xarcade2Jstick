@@ -78,122 +78,126 @@ int main(int argc, char* argv[]) {
 
 				/* ----------------  Player 1 controls ------------------- */
 				/* buttons */
-				case 29:
+				case KEY_LEFTCTRL:
 					uinput_gpad_write(&uinp_gpads[0], BTN_A,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 56:
+				case KEY_LEFTALT:
 					uinput_gpad_write(&uinp_gpads[0], BTN_B,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 57:
+				case KEY_SPACE:
 					uinput_gpad_write(&uinp_gpads[0], BTN_C,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 42:
+				case KEY_LEFTSHIFT:
 					uinput_gpad_write(&uinp_gpads[0], BTN_X,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 44:
+				case KEY_Z:
 					uinput_gpad_write(&uinp_gpads[0], BTN_Y,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 45:
+				case KEY_X:
 					uinput_gpad_write(&uinp_gpads[0], BTN_Z,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 46:
+				case KEY_C:
 					uinput_gpad_write(&uinp_gpads[0], BTN_TL,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 6:
+				case KEY_5:
 					uinput_gpad_write(&uinp_gpads[0], BTN_TR,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 2:
+				case KEY_1:
 					uinput_gpad_write(&uinp_gpads[0], BTN_START,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 4:
+				case KEY_3:
 					uinput_gpad_write(&uinp_gpads[0], BTN_SELECT,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 
 					/* joystick */
-				case 75:
+				case KEY_KP4:
+				case KEY_LEFT:
 					uinput_gpad_write(&uinp_gpads[0], ABS_X,
 							xarcdev.ev[ctr].value == 0 ? 2 : 0, EV_ABS); // center or left
 					break;
-				case 77:
+				case KEY_KP6:
+				case KEY_RIGHT:
 					uinput_gpad_write(&uinp_gpads[0], ABS_X,
 							xarcdev.ev[ctr].value == 0 ? 2 : 4, EV_ABS); // center or right
 					break;
-				case 72:
+				case KEY_KP8:
+				case KEY_UP:
 					uinput_gpad_write(&uinp_gpads[0], ABS_Y,
 							xarcdev.ev[ctr].value == 0 ? 2 : 0, EV_ABS); // center or up
 					break;
-				case 80:
+				case KEY_KP2:
+				case KEY_DOWN:
 					uinput_gpad_write(&uinp_gpads[0], ABS_Y,
 							xarcdev.ev[ctr].value == 0 ? 2 : 4, EV_ABS); // center or down
 					break;
 
 					/* ----------------  Player 2 controls ------------------- */
 					/* buttons */
-				case 30:
+				case KEY_A:
 					uinput_gpad_write(&uinp_gpads[1], BTN_A,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 31:
+				case KEY_S:
 					uinput_gpad_write(&uinp_gpads[1], BTN_B,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 16:
+				case KEY_Q:
 					uinput_gpad_write(&uinp_gpads[1], BTN_C,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 17:
+				case KEY_W:
 					uinput_gpad_write(&uinp_gpads[1], BTN_X,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 18:
+				case KEY_E:
 					uinput_gpad_write(&uinp_gpads[1], BTN_Y,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 26:
+				case KEY_LEFTBRACE:
 					uinput_gpad_write(&uinp_gpads[1], BTN_Z,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 27:
+				case KEY_RIGHTBRACE:
 					uinput_gpad_write(&uinp_gpads[1], BTN_TL,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 7:
+				case KEY_6:
 					uinput_gpad_write(&uinp_gpads[1], BTN_TR,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 3:
+				case KEY_2:
 					uinput_gpad_write(&uinp_gpads[1], BTN_START,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
-				case 5:
+				case KEY_4:
 					uinput_gpad_write(&uinp_gpads[1], BTN_SELECT,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 
 					/* joystick */
-				case 32:
+				case KEY_D:
 					uinput_gpad_write(&uinp_gpads[1], ABS_X,
 							xarcdev.ev[ctr].value == 0 ? 2 : 0, EV_ABS); // center or left
 					break;
-				case 34:
+				case KEY_G:
 					uinput_gpad_write(&uinp_gpads[1], ABS_X,
 							xarcdev.ev[ctr].value == 0 ? 2 : 4, EV_ABS); // center or right
 					break;
-				case 19:
+				case KEY_R:
 					uinput_gpad_write(&uinp_gpads[1], ABS_Y,
 							xarcdev.ev[ctr].value == 0 ? 2 : 0, EV_ABS); // center or up
 					break;
-				case 33:
+				case KEY_F:
 					uinput_gpad_write(&uinp_gpads[1], ABS_Y,
 							xarcdev.ev[ctr].value == 0 ? 2 : 4, EV_ABS); // center or down
 					break;
@@ -203,12 +207,12 @@ int main(int argc, char* argv[]) {
 				}
 
 				/* button combinations */
-				if (keyStates[2] == 2 && keyStates[4] > 0) { // TAB key
+				if (keyStates[KEY_1] == 2 && keyStates[KEY_3] > 0) { // TAB key
 					uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
 				} else {
 					uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
 				}
-				if (keyStates[3] == 2 && keyStates[5] > 0) { // ESC key
+				if (keyStates[KEY_2] == 2 && keyStates[KEY_4] > 0) { // ESC key
 					uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
 				} else {
 					uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
