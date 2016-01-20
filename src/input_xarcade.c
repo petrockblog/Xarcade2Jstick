@@ -58,7 +58,7 @@ int findXarcadeDevice(void) {
 		snprintf(charbuffer, 256, "/dev/input/event%d", ctr);
 		fevdev = open(charbuffer, O_RDONLY);
 		if (fevdev == -1) {
-			printf("Failed to open event device %d.\n", ctr);
+			printf("Failed to open event device %s.\n", charbuffer);
 			continue;
 		}
 
@@ -68,6 +68,7 @@ int findXarcadeDevice(void) {
 			printf("Found %s (%s)\n", charbuffer, name);
 			break;
 		} else {
+			printf("%s on %s is not a valid XGaming device\n", name, charbuffer);
 			close(fevdev);
 		}
 	}
