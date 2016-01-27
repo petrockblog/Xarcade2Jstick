@@ -1,4 +1,5 @@
-CC=gcc
+CROSS_COMPILE=
+CC=$(CROSS_COMPILE)gcc
 SRCDIR=.
 BUILDDIR=../build
 CFLAGS=-c -Wall -O3
