@@ -28,6 +28,7 @@ clean:
 install:
 	install -d $(DESTDIR)$(bindir)
 	install -m 0755 $(TARGET) $(DESTDIR)$(bindir)
+	install -d $(DESTDIR)/lib/udev/rules.d/
 	install 80-xarcade.rules $(DESTDIR)/lib/udev/rules.d/
 
 uninstall:
