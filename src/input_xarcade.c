@@ -17,6 +17,7 @@
 /* ======================================================================== */
 
 #include <glob.h>
+#include <errno.h>
 #include "input_xarcade.h"
 
 // declaration of supplementary functions  -------------------
@@ -36,7 +37,9 @@ int16_t input_xarcade_read(INP_XARC_DEV* const xdev) {
 	int rd;
 
 	rd = read(xdev->fevdev, xdev->ev, sizeof(struct input_event) * 64);
-	return (int) (rd / sizeof(struct input_event));
+	if (rd < 0)
+		return -errno;
+	return rd;
 }
 
 int16_t input_xarcade_close(INP_XARC_DEV* const xdev) {

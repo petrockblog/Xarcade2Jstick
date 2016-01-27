@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 
 	while (1) {
 		rd = input_xarcade_read(&xarcdev);
-		if (rd == 0) {
+		if (rd < 0) {
 			break;
 		}
 
