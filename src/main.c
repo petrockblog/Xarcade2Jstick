@@ -114,6 +114,7 @@ int main(int argc, char* argv[]) {
 					/* handle combination */
 					if (keyStates[KEY_3] && xarcdev.ev[ctr].value) {
 						uinput_kbd_write(&uinp_kbd, KEY_6, 1, EV_KEY);
+						uinput_kbd_sleep();
 						uinput_kbd_write(&uinp_kbd, KEY_6, 0, EV_KEY);
 						combo = 2;
 						continue;
@@ -133,6 +134,7 @@ int main(int argc, char* argv[]) {
 					/* combination with the other side button, quit */
 					if (keyStates[KEY_3] && keyStates[KEY_4]) {
 						uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
+						uinput_kbd_sleep();
 						uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
 						keyStates[KEY_3] = keyStates[KEY_4] = 0;
 						combo = 2;
@@ -143,6 +145,7 @@ int main(int argc, char* argv[]) {
 						continue;
 					if (!combo) {
 						uinput_gpad_write(&uinp_gpads[0], BTN_SELECT, 1, EV_KEY);
+						uinput_gpad_sleep();
 						uinput_gpad_write(&uinp_gpads[0], BTN_SELECT, 0, EV_KEY);
 					} else
 						combo--;
@@ -209,6 +212,7 @@ int main(int argc, char* argv[]) {
 					/* handle combination */
 					if (keyStates[KEY_4] && xarcdev.ev[ctr].value) {
 						uinput_kbd_write(&uinp_kbd, KEY_7, 1, EV_KEY);
+						uinput_kbd_sleep();
 						uinput_kbd_write(&uinp_kbd, KEY_7, 0, EV_KEY);
 						combo = 2;
 						continue;
@@ -228,6 +232,7 @@ int main(int argc, char* argv[]) {
 					/* combination with the other side button, quit */
 					if (keyStates[KEY_3] && keyStates[KEY_4]) {
 						uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
+						uinput_kbd_sleep();
 						uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
 						keyStates[KEY_3] = keyStates[KEY_4] = 0;
 						combo = 2;
@@ -238,6 +243,7 @@ int main(int argc, char* argv[]) {
 						continue;
 					if (!combo) {
 						uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, 1, EV_KEY);
+						uinput_gpad_sleep();
 						uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, 0, EV_KEY);
 					} else
 						combo--;
