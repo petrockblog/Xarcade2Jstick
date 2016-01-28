@@ -1,4 +1,5 @@
-CC=gcc
+CROSS_COMPILE=
+CC=$(CROSS_COMPILE)gcc
 SRCDIR=.
 BUILDDIR=../build
 CFLAGS=-c -Wall -O3
@@ -28,6 +29,8 @@ clean:
 install:
 	install -d $(DESTDIR)$(bindir)
 	install -m 0755 $(TARGET) $(DESTDIR)$(bindir)
+	install -d $(DESTDIR)/lib/udev/rules.d/
+	install 80-xarcade.rules $(DESTDIR)/lib/udev/rules.d/
 
 uninstall:
 	-rm $(DESTDIR)$(bindir)/$(TARGET)

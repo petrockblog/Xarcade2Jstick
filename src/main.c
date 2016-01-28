@@ -46,7 +46,7 @@ INP_XARC_DEV xarcdev;
 
 int main(int argc, char* argv[]) {
 	int result = 0;
-	int rd, ctr;
+	int rd, ctr, combo = 0;
 	char keyStates[256];
 
 	uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE);
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 
 	while (1) {
 		rd = input_xarcade_read(&xarcdev);
-		if (rd == 0) {
+		if (rd < 0) {
 			break;
 		}
 
@@ -111,12 +111,42 @@ int main(int argc, char* argv[]) {
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case KEY_1:
-					uinput_gpad_write(&uinp_gpads[0], BTN_START,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					/* handle combination */
+					if (keyStates[KEY_3] && xarcdev.ev[ctr].value) {
+						uinput_kbd_write(&uinp_kbd, KEY_6, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_6, 0, EV_KEY);
+						combo = 2;
+						continue;
+					}
+					if (!combo)
+						uinput_gpad_write(&uinp_gpads[0], BTN_START,
+								xarcdev.ev[ctr].value > 0, EV_KEY);
+					else
+						combo--;
 					break;
 				case KEY_3:
-					uinput_gpad_write(&uinp_gpads[0], BTN_SELECT,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					/*
+					 * side buttons behave differently: they combine with other
+					 * keys so they only generate events on key up and no
+					 * valid combination was hit
+					 */
+					/* combination with the other side button, quit */
+					if (keyStates[KEY_3] && keyStates[KEY_4]) {
+						uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
+						keyStates[KEY_3] = keyStates[KEY_4] = 0;
+						combo = 2;
+						continue;
+					}
+					/* it's a key down, ignore */
+					if (xarcdev.ev[ctr].value)
+						continue;
+					if (!combo) {
+						uinput_gpad_write(&uinp_gpads[0], BTN_SELECT, 1, EV_KEY);
+						uinput_gpad_write(&uinp_gpads[0], BTN_SELECT, 0, EV_KEY);
+					} else
+						combo--;
+
 					break;
 
 					/* joystick */
@@ -176,12 +206,42 @@ int main(int argc, char* argv[]) {
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case KEY_2:
-					uinput_gpad_write(&uinp_gpads[1], BTN_START,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					/* handle combination */
+					if (keyStates[KEY_4] && xarcdev.ev[ctr].value) {
+						uinput_kbd_write(&uinp_kbd, KEY_7, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_7, 0, EV_KEY);
+						combo = 2;
+						continue;
+					}
+					if (!combo)
+						uinput_gpad_write(&uinp_gpads[1], BTN_START,
+								xarcdev.ev[ctr].value > 0, EV_KEY);
+					else
+						combo--;
 					break;
 				case KEY_4:
-					uinput_gpad_write(&uinp_gpads[1], BTN_SELECT,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					/*
+					 * side buttons behave differently: they combine with other
+					 * keys so they only generate events on key up and no
+					 * valid combination was hit
+					 */
+					/* combination with the other side button, quit */
+					if (keyStates[KEY_3] && keyStates[KEY_4]) {
+						uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
+						keyStates[KEY_3] = keyStates[KEY_4] = 0;
+						combo = 2;
+						continue;
+					}
+					/* it's a key down, ignore */
+					if (xarcdev.ev[ctr].value)
+						continue;
+					if (!combo) {
+						uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, 1, EV_KEY);
+						uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, 0, EV_KEY);
+					} else
+						combo--;
+
 					break;
 
 					/* joystick */
@@ -204,18 +264,6 @@ int main(int argc, char* argv[]) {
 
 				default:
 					break;
-				}
-
-				/* button combinations */
-				if (keyStates[KEY_1] == 2 && keyStates[KEY_3] > 0) { // TAB key
-					uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
-				} else {
-					uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
-				}
-				if (keyStates[KEY_2] == 2 && keyStates[KEY_4] > 0) { // ESC key
-					uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
-				} else {
-					uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
 				}
 			}
 		}

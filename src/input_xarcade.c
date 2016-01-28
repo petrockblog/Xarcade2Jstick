@@ -16,6 +16,8 @@
 /*                 Copyright (c) 2014, Florian Mueller                      */
 /* ======================================================================== */
 
+#include <glob.h>
+#include <errno.h>
 #include "input_xarcade.h"
 
 // declaration of supplementary functions  -------------------
@@ -35,7 +37,9 @@ int16_t input_xarcade_read(INP_XARC_DEV* const xdev) {
 	int rd;
 
 	rd = read(xdev->fevdev, xdev->ev, sizeof(struct input_event) * 64);
-	return (int) (rd / sizeof(struct input_event));
+	if (rd < 0)
+		return -errno;
+	return rd;
 }
 
 int16_t input_xarcade_close(INP_XARC_DEV* const xdev) {
@@ -49,16 +53,24 @@ int16_t input_xarcade_close(INP_XARC_DEV* const xdev) {
 // supplementary functions -------------------
 
 int findXarcadeDevice(void) {
-	char charbuffer[256];
 	char name[256];
-	int fevdev;
+	char *filename;
+	int fevdev = -1;
 	int ctr;
+	int rc;
+	glob_t pglob;
 
-	for (ctr = 0; ctr < 9; ++ctr) {
-		snprintf(charbuffer, 256, "/dev/input/event%d", ctr);
-		fevdev = open(charbuffer, O_RDONLY);
+	rc = glob("/dev/input/event*", 0, NULL, &pglob);
+	if (rc) {
+		printf("Failed to open event devices\n");
+		return -1;
+	}
+
+	for (ctr = 0; ctr < pglob.gl_pathc; ++ctr) {
+		filename = pglob.gl_pathv[ctr];
+		fevdev = open(filename, O_RDONLY);
 		if (fevdev == -1) {
-			printf("Failed to open event device %d.\n", ctr);
+			printf("Failed to open event device %s.\n", filename);
 			continue;
 		}
 
@@ -66,11 +78,14 @@ int findXarcadeDevice(void) {
 		if ((strcmp(name, "XGaming X-Arcade") == 0)
 		    || (strcmp(name, "XGaming USBAdapter") == 0)
 		    || (strcmp(name, "HID 1241:1122") == 0)) {
-			printf("Found %s (%s)\n", charbuffer, name);
+			printf("Found %s (%s)\n", filename, name);
 			break;
 		} else {
 			close(fevdev);
 		}
 	}
+	globfree(&pglob);
+
 	return fevdev;
 }
+
