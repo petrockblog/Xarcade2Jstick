@@ -92,6 +92,6 @@ int16_t uinput_kbd_write(UINP_KBD_DEV* const kbd, unsigned int keycode,
 
 /* sleep between immediate successive keyboard writes */
 int16_t uinput_kbd_sleep() {
-	usleep(100000);
+	usleep(50000);
 	return 0;
 }

@@ -135,6 +135,6 @@ int16_t uinput_gpad_write(UINP_GPAD_DEV* const gpad, uint16_t keycode,
 
 /* sleep between immediate successive gpad writes */
 int16_t uinput_gpad_sleep() {
-	usleep(100000);
+	usleep(50000);
 	return 0;
 }
