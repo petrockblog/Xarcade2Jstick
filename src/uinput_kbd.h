@@ -29,5 +29,6 @@ int16_t uinput_kbd_open(UINP_KBD_DEV* const kbd);
 int16_t uinput_kbd_close(UINP_KBD_DEV* const kbd);
 int16_t uinput_kbd_write(UINP_KBD_DEV* const kbd, unsigned int keycode,
 		int keyvalue, unsigned int evtype);
+int16_t uinput_kbd_sleep();
 
 #endif /* UINPUT_KBD_H_ */

@@ -36,5 +36,6 @@ int16_t uinput_gpad_open(UINP_GPAD_DEV* const gpad, UINPUT_GPAD_TYPE_E type);
 int16_t uinput_gpad_close(UINP_GPAD_DEV* const gpad);
 int16_t uinput_gpad_write(UINP_GPAD_DEV* const gpad, uint16_t keycode,
 		int16_t keyvalue, uint16_t evtype);
+int16_t uinput_gpad_sleep();
 
 #endif /* UINPUT_GAMEPAD_H_ */
