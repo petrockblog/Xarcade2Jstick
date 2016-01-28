@@ -26,7 +26,7 @@ clean:
 
 -include $(DEPS)
 
-install:
+install: all
 	install -d $(DESTDIR)$(bindir)
 	install -m 0755 $(TARGET) $(DESTDIR)$(bindir)
 	install -d $(DESTDIR)/lib/udev/rules.d/
