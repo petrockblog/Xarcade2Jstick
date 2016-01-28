@@ -59,6 +59,11 @@ int main(int argc, char* argv[]) {
 		exit(-1);
 	}
 
+	if (daemon(0, 1)) {
+		perror("daemon");
+		return 1;
+	}
+
 	while (1) {
 		rd = input_xarcade_read(&xarcdev);
 		if (rd < 0) {
