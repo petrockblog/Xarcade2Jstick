@@ -39,7 +39,7 @@ int16_t input_xarcade_read(INP_XARC_DEV* const xdev) {
 	rd = read(xdev->fevdev, xdev->ev, sizeof(struct input_event) * 64);
 	if (rd < 0)
 		return -errno;
-	return rd;
+	return (rd / sizeof(struct input_event));
 }
 
 int16_t input_xarcade_close(INP_XARC_DEV* const xdev) {
