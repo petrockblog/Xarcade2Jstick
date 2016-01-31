@@ -49,15 +49,16 @@ int main(int argc, char* argv[]) {
 	int rd, ctr, combo = 0;
 	char keyStates[256];
 
-	uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE);
-	uinput_gpad_open(&uinp_gpads[1], UINPUT_GPAD_TYPE_XARCADE);
-	uinput_kbd_open(&uinp_kbd);
 	printf("[Xarcade2Joystick] Getting exclusive access: ");
 	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
 	printf("%s\n", (result == 0) ? "SUCCESS" : "FAILURE");
 	if (result != 0) {
 		exit(-1);
 	}
+
+	uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE);
+	uinput_gpad_open(&uinp_gpads[1], UINPUT_GPAD_TYPE_XARCADE);
+	uinput_kbd_open(&uinp_kbd);
 
 	if (daemon(0, 1)) {
 		perror("daemon");
