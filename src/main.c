@@ -49,6 +49,20 @@ int main(int argc, char* argv[]) {
 	int rd, ctr, combo = 0;
 	char keyStates[256];
 
+	int detach = 0;
+	int opt;
+	while ((opt = getopt(argc, argv, "+d")) != -1) {
+		switch (opt) {
+			case 'd':
+				detach = 1;
+				break;
+			default:
+				fprintf(stderr, "Usage: %s [-d]\n", argv[0]);
+				exit(1);
+				break;
+		}
+	}
+
 	printf("[Xarcade2Joystick] Getting exclusive access: ");
 	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
 	printf("%s\n", (result == 0) ? "SUCCESS" : "FAILURE");
@@ -60,9 +74,11 @@ int main(int argc, char* argv[]) {
 	uinput_gpad_open(&uinp_gpads[1], UINPUT_GPAD_TYPE_XARCADE);
 	uinput_kbd_open(&uinp_kbd);
 
-	if (daemon(0, 1)) {
-		perror("daemon");
-		return 1;
+	if (detach) {
+		if (daemon(0, 1)) {
+			perror("daemon");
+			return 1;
+		}
 	}
 
 	while (1) {
