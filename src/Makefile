@@ -30,7 +30,9 @@ install: all
 	install -d $(DESTDIR)$(bindir)
 	install -m 0755 $(TARGET) $(DESTDIR)$(bindir)
 	install -d $(DESTDIR)/lib/udev/rules.d/
-	install 80-xarcade.rules $(DESTDIR)/lib/udev/rules.d/
+	install -m 0644 80-xarcade.rules $(DESTDIR)/lib/udev/rules.d/
+	install -d $(DESTDIR)/lib/systemd/system/
+	install -m 0644 xarcade2jstick.service $(DESTDIR)/lib/systemd/system/
 
 uninstall:
 	-rm $(DESTDIR)$(bindir)/$(TARGET)
