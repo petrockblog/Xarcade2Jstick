@@ -119,9 +119,9 @@ int main(int argc, char* argv[]) {
 				case KEY_1:
 					/* handle combination */
 					if (keyStates[KEY_3] && xarcdev.ev[ctr].value) {
-						uinput_kbd_write(&uinp_kbd, KEY_6, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_5, 1, EV_KEY);
 						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_6, 0, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_5, 0, EV_KEY);
 						combo = 2;
 						continue;
 					}
@@ -217,9 +217,9 @@ int main(int argc, char* argv[]) {
 				case KEY_2:
 					/* handle combination */
 					if (keyStates[KEY_4] && xarcdev.ev[ctr].value) {
-						uinput_kbd_write(&uinp_kbd, KEY_7, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_6, 1, EV_KEY);
 						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_7, 0, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_6, 0, EV_KEY);
 						combo = 2;
 						continue;
 					}
