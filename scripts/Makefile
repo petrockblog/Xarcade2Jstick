@@ -8,3 +8,9 @@ installservice:
 uninstallservice:
 	-rm $(DESTDIR)/lib/udev/rules.d/80-xarcade.rules
 	-rm $(DESTDIR)/lib/systemd/system/xarcade2jstick.service
+	
+ifneq ("$(wildcard /etc/init.d/xarcade2jstick)","") # Remove legacy service
+	/etc/init.d/xarcade2jstick stop
+	update-rc.d xarcade2jstick remove
+	-rm /etc/init.d/xarcade2jstick
+endif
