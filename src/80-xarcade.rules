@@ -1,1 +1,1 @@
-SUBSYSTEM=="input", ATTRS{idVendor} == "aa55", ATTRS{idProduct} == "0101", RUN += "/usr/local/bin/xarcade2jstick -d"
+ACTION=="add", SUBSYSTEM=="input", ATTRS{idVendor} == "aa55", ATTRS{idProduct} == "0101", RUN += "/usr/local/bin/xarcade2jstick -d"
