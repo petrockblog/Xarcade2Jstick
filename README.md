@@ -5,6 +5,15 @@ _Xarcade2Jstick_ exclusively captures the keyboard events of the __Xarcade Tanks
 
 _Xarcade2Jstick_ was originally written as a supplementary tool for the [RetroPie Project](http://blog.petrockblock.com/retropie/). Using this tool allows the usage of the auto-config capability of [RetroArch](http://themaister.net/retroarch.html), a central component of a RetroPie installation.
 
+## Usage
+
+Your Xarcade will appear as two gamepads and can be used accordingly. There are also some special combinations of buttons that have special meaning:
+
+* P1 start + P2 start = TAB
+* P1 select + P2 select = ESC (the front side buttons)
+* P1 select + P1 start = 5
+* P2 select + P2 start = 6
+
 ## Downloading
 
 If you would like to download the current version of _Xarcade2Jstick_ from [its Github repository](https://github.com/petrockblog/Xarcade2Joystick), you can use this command:

@@ -119,16 +119,26 @@ int main(int argc, char* argv[]) {
 				case KEY_1:
 					/* handle combination */
 					if (keyStates[KEY_3] && xarcdev.ev[ctr].value) {
-						uinput_kbd_write(&uinp_kbd, KEY_6, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_5, 1, EV_KEY);
 						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_6, 0, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_5, 0, EV_KEY);
+						combo = 2;
+						continue;
+					} else if (keyStates[KEY_2] && xarcdev.ev[ctr].value) {
+						uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
+						uinput_kbd_sleep();
+						uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
 						combo = 2;
 						continue;
 					}
-					if (!combo)
-						uinput_gpad_write(&uinp_gpads[0], BTN_START,
-								xarcdev.ev[ctr].value > 0, EV_KEY);
-					else
+					/* it's a key down, ignore */
+					if (xarcdev.ev[ctr].value)
+						continue;
+					if (!combo) {
+						uinput_gpad_write(&uinp_gpads[0], BTN_START, 1, EV_KEY);
+						uinput_gpad_sleep();
+						uinput_gpad_write(&uinp_gpads[0], BTN_START, 0, EV_KEY);
+					} else
 						combo--;
 					break;
 				case KEY_3:
@@ -217,16 +227,26 @@ int main(int argc, char* argv[]) {
 				case KEY_2:
 					/* handle combination */
 					if (keyStates[KEY_4] && xarcdev.ev[ctr].value) {
-						uinput_kbd_write(&uinp_kbd, KEY_7, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_6, 1, EV_KEY);
 						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_7, 0, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_6, 0, EV_KEY);
+						combo = 2;
+						continue;
+					} else if (keyStates[KEY_1] && xarcdev.ev[ctr].value) {
+						uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
+						uinput_kbd_sleep();
+						uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
 						combo = 2;
 						continue;
 					}
-					if (!combo)
-						uinput_gpad_write(&uinp_gpads[1], BTN_START,
-								xarcdev.ev[ctr].value > 0, EV_KEY);
-					else
+					/* it's a key down, ignore */
+					if (xarcdev.ev[ctr].value)
+						continue;
+					if (!combo) {
+						uinput_gpad_write(&uinp_gpads[1], BTN_START, 1, EV_KEY);
+						uinput_gpad_sleep();
+						uinput_gpad_write(&uinp_gpads[1], BTN_START, 0, EV_KEY);
+					} else
 						combo--;
 					break;
 				case KEY_4:
