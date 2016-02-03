@@ -135,12 +135,6 @@ int main(int argc, char* argv[]) {
 				case KEY_1:
 					/* handle combination */
 					if (keyStates[KEY_3] && xarcdev.ev[ctr].value) {
-						uinput_kbd_write(&uinp_kbd, KEY_5, 1, EV_KEY);
-						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_5, 0, EV_KEY);
-						combo = 2;
-						continue;
-					} else if (keyStates[KEY_2] && xarcdev.ev[ctr].value) {
 						uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
 						uinput_kbd_sleep();
 						uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
@@ -158,20 +152,6 @@ int main(int argc, char* argv[]) {
 						combo--;
 					break;
 				case KEY_3:
-					/*
-					 * side buttons behave differently: they combine with other
-					 * keys so they only generate events on key up and no
-					 * valid combination was hit
-					 */
-					/* combination with the other side button, quit */
-					if (keyStates[KEY_3] && keyStates[KEY_4]) {
-						uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
-						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
-						keyStates[KEY_3] = keyStates[KEY_4] = 0;
-						combo = 2;
-						continue;
-					}
 					/* it's a key down, ignore */
 					if (xarcdev.ev[ctr].value)
 						continue;
@@ -243,15 +223,9 @@ int main(int argc, char* argv[]) {
 				case KEY_2:
 					/* handle combination */
 					if (keyStates[KEY_4] && xarcdev.ev[ctr].value) {
-						uinput_kbd_write(&uinp_kbd, KEY_6, 1, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
 						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_6, 0, EV_KEY);
-						combo = 2;
-						continue;
-					} else if (keyStates[KEY_1] && xarcdev.ev[ctr].value) {
-						uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
-						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
 						combo = 2;
 						continue;
 					}
@@ -266,20 +240,6 @@ int main(int argc, char* argv[]) {
 						combo--;
 					break;
 				case KEY_4:
-					/*
-					 * side buttons behave differently: they combine with other
-					 * keys so they only generate events on key up and no
-					 * valid combination was hit
-					 */
-					/* combination with the other side button, quit */
-					if (keyStates[KEY_3] && keyStates[KEY_4]) {
-						uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
-						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
-						keyStates[KEY_3] = keyStates[KEY_4] = 0;
-						combo = 2;
-						continue;
-					}
 					/* it's a key down, ignore */
 					if (xarcdev.ev[ctr].value)
 						continue;
