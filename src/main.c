@@ -31,6 +31,7 @@
 #include <termios.h>
 #include <signal.h>
 #include <time.h>
+#include <syslog.h>
 
 #include "uinput_gamepad.h"
 #include "uinput_kbd.h"
@@ -43,6 +44,12 @@
 UINP_KBD_DEV uinp_kbd;
 UINP_GPAD_DEV uinp_gpads[GPADSNUM];
 INP_XARC_DEV xarcdev;
+int use_syslog = 0;
+
+#define SYSLOG(...) if (use_syslog == 1) { syslog(__VA_ARGS__); }
+
+static void teardown();
+static void signal_handler(int signum);
 
 int main(int argc, char* argv[]) {
 	int result = 0;
@@ -51,28 +58,37 @@ int main(int argc, char* argv[]) {
 
 	int detach = 0;
 	int opt;
-	while ((opt = getopt(argc, argv, "+d")) != -1) {
+	while ((opt = getopt(argc, argv, "+ds")) != -1) {
 		switch (opt) {
 			case 'd':
 				detach = 1;
 				break;
+			case 's':
+				use_syslog = 1;
+				break;
 			default:
-				fprintf(stderr, "Usage: %s [-d]\n", argv[0]);
+				fprintf(stderr, "Usage: %s [-d] [-s]\n", argv[0]);
 				exit(EXIT_FAILURE);
 				break;
 		}
 	}
+
+	SYSLOG(LOG_NOTICE, "Starting.");
 
 	printf("[Xarcade2Joystick] Getting exclusive access: ");
 	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
 	if (result != 0) {
 		if (errno == 0) {
 			printf("Not found.\n");
+			SYSLOG(LOG_ERR, "Xarcade not found, exiting.");
 		} else {
 			printf("Failed to get exclusive access to Xarcade: %d (%s)\n", errno, strerror(errno));
+			SYSLOG(LOG_ERR, "Failed to get exclusive access to Xarcade, exiting: %d (%s)", errno, strerror(errno));
 		}
 		exit(EXIT_FAILURE);
 	}
+
+	SYSLOG(LOG_NOTICE, "Got exclusive access to Xarcade.");
 
 	uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE);
 	uinput_gpad_open(&uinp_gpads[1], UINPUT_GPAD_TYPE_XARCADE);
@@ -84,6 +100,10 @@ int main(int argc, char* argv[]) {
 			return 1;
 		}
 	}
+	signal(SIGINT, signal_handler);
+	signal(SIGTERM, signal_handler);
+
+	SYSLOG(LOG_NOTICE, "Running.");
 
 	while (1) {
 		rd = input_xarcade_read(&xarcdev);
@@ -321,10 +341,25 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
+	teardown();
+	return EXIT_SUCCESS;
+}
+
+static void teardown() {
 	printf("Exiting.\n");
+	SYSLOG(LOG_NOTICE, "Exiting.");
+	
 	input_xarcade_close(&xarcdev);
 	uinput_gpad_close(&uinp_gpads[0]);
 	uinput_gpad_close(&uinp_gpads[1]);
 	uinput_kbd_close(&uinp_kbd);
-	return EXIT_SUCCESS;
+}
+
+static void signal_handler(int signum) {
+	signal(signum, SIG_DFL);
+
+	printf("Received signal %d (%s), exiting.\n", signum, strsignal(signum));
+	SYSLOG(LOG_NOTICE, "Received signal %d (%s), exiting.", signum, strsignal(signum));
+	teardown();
+	exit(EXIT_SUCCESS);
 }

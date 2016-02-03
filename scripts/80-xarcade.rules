@@ -2,4 +2,4 @@
 ACTION=="add", SUBSYSTEM=="input", ATTRS{idVendor}=="aa55", ATTRS{idProduct}=="0101", TEST=="/bin/systemd", TAG+="systemd", ENV{SYSTEMD_WANTS}+="xarcade2jstick.service"
 
 # Raspbian Wheezy
-ACTION=="add", SUBSYSTEM=="input", ATTRS{idVendor}=="aa55", ATTRS{idProduct}=="0101", TEST!="/bin/systemd", RUN+="/usr/local/bin/xarcade2jstick -d"
+ACTION=="add", SUBSYSTEM=="input", ATTRS{idVendor}=="aa55", ATTRS{idProduct}=="0101", TEST!="/bin/systemd", RUN+="/usr/local/bin/xarcade2jstick -d -s"
