@@ -49,7 +49,8 @@ static void send_key_event(int fd, unsigned int keycode, int keyvalue,
 }
 
 /* Setup the uinput device */
-int16_t uinput_gpad_open(UINP_GPAD_DEV* const gpad, UINPUT_GPAD_TYPE_E type) {
+int16_t uinput_gpad_open(UINP_GPAD_DEV* const gpad, UINPUT_GPAD_TYPE_E type,
+			 unsigned char number) {
 	int16_t uinp_fd = -1;
 	gpad->fd = open("/dev/uinput", O_WRONLY | O_NDELAY);
 	if (gpad->fd <= 0) {
@@ -59,8 +60,7 @@ int16_t uinput_gpad_open(UINP_GPAD_DEV* const gpad, UINPUT_GPAD_TYPE_E type) {
 
 	struct uinput_user_dev uinp;
 	memset(&uinp, 0, sizeof(uinp));
-	strncpy(uinp.name, "Xarcade-to-Gamepad Device",
-			strlen("Xarcade-to-Gamepad Device"));
+	snprintf(uinp.name, sizeof(uinp.name), "Xarcade-to-Gamepad Device %i", number);
 	uinp.id.version = 4;
 	uinp.id.bustype = BUS_USB;
 	uinp.id.product = 1;
