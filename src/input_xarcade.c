@@ -29,8 +29,13 @@ int16_t input_xarcade_open(INP_XARC_DEV* const xdev, INPUT_XARC_TYPE_E type) {
 
 	// TODO check input parameter type
 	xdev->fevdev = findXarcadeDevice();
-	result = ioctl(xdev->fevdev, EVIOCGRAB, 1);
-	return result;
+	if (xdev->fevdev != -1) {
+		result = ioctl(xdev->fevdev, EVIOCGRAB, 1);
+		return result;
+	} else {
+		errno = 0;
+		return -1;
+	}
 }
 
 int16_t input_xarcade_read(INP_XARC_DEV* const xdev) {
@@ -81,6 +86,7 @@ int findXarcadeDevice(void) {
 			break;
 		} else {
 			close(fevdev);
+			fevdev = -1;
 		}
 	}
 	globfree(&pglob);

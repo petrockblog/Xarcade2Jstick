@@ -58,16 +58,20 @@ int main(int argc, char* argv[]) {
 				break;
 			default:
 				fprintf(stderr, "Usage: %s [-d]\n", argv[0]);
-				exit(1);
+				exit(EXIT_FAILURE);
 				break;
 		}
 	}
 
 	printf("[Xarcade2Joystick] Getting exclusive access: ");
 	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
-	printf("%s\n", (result == 0) ? "SUCCESS" : "FAILURE");
 	if (result != 0) {
-		exit(-1);
+		if (errno == 0) {
+			printf("Not found.\n");
+		} else {
+			printf("Failed to get exclusive access to Xarcade: %d (%s)\n", errno, strerror(errno));
+		}
+		exit(EXIT_FAILURE);
 	}
 
 	uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE);
@@ -322,5 +326,5 @@ int main(int argc, char* argv[]) {
 	uinput_gpad_close(&uinp_gpads[0]);
 	uinput_gpad_close(&uinp_gpads[1]);
 	uinput_kbd_close(&uinp_kbd);
-	return 0;
+	return EXIT_SUCCESS;
 }
