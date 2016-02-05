@@ -55,10 +55,11 @@ int main(int argc, char* argv[]) {
 	int result = 0;
 	int rd, ctr, combo = 0;
 	char keyStates[256];
+  char* evdev = NULL;
 
 	int detach = 0;
 	int opt;
-	while ((opt = getopt(argc, argv, "+ds")) != -1) {
+	while ((opt = getopt(argc, argv, "dse:")) != -1) {
 		switch (opt) {
 			case 'd':
 				detach = 1;
@@ -66,8 +67,11 @@ int main(int argc, char* argv[]) {
 			case 's':
 				use_syslog = 1;
 				break;
+      case 'e':
+        evdev = optarg;
+        break;
 			default:
-				fprintf(stderr, "Usage: %s [-d] [-s]\n", argv[0]);
+				fprintf(stderr, "Usage: %s [-d] [-s] [-e eventPath]\n", argv[0]);
 				exit(EXIT_FAILURE);
 				break;
 		}
@@ -76,7 +80,7 @@ int main(int argc, char* argv[]) {
 	SYSLOG(LOG_NOTICE, "Starting.");
 
 	printf("[Xarcade2Joystick] Getting exclusive access: ");
-	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
+	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK, evdev);
 	if (result != 0) {
 		if (errno == 0) {
 			printf("Not found.\n");
@@ -90,8 +94,8 @@ int main(int argc, char* argv[]) {
 
 	SYSLOG(LOG_NOTICE, "Got exclusive access to Xarcade.");
 
-	uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE);
-	uinput_gpad_open(&uinp_gpads[1], UINPUT_GPAD_TYPE_XARCADE);
+	uinput_gpad_open(&uinp_gpads[0], UINPUT_GPAD_TYPE_XARCADE, 1);
+	uinput_gpad_open(&uinp_gpads[1], UINPUT_GPAD_TYPE_XARCADE, 2);
 	uinput_kbd_open(&uinp_kbd);
 
 	if (detach) {

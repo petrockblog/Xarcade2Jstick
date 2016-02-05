@@ -24,11 +24,18 @@
 int findXarcadeDevice(void);
 
 // relizations ----------------------
-int16_t input_xarcade_open(INP_XARC_DEV* const xdev, INPUT_XARC_TYPE_E type) {
+int16_t input_xarcade_open(INP_XARC_DEV* const xdev, INPUT_XARC_TYPE_E type, char* evdev) {
 	int result;
 
 	// TODO check input parameter type
-	xdev->fevdev = findXarcadeDevice();
+
+	// Check if a device was forced to avoid scanning for an X-Arcade
+	if(evdev) {
+		xdev->fevdev = open(evdev, O_RDONLY);
+		printf("Forced %s\n", evdev);
+	} else {
+		xdev->fevdev = findXarcadeDevice();
+	}
 	if (xdev->fevdev != -1) {
 		result = ioctl(xdev->fevdev, EVIOCGRAB, 1);
 		return result;
@@ -73,6 +80,7 @@ int findXarcadeDevice(void) {
 
 	for (ctr = 0; ctr < pglob.gl_pathc; ++ctr) {
 		filename = pglob.gl_pathv[ctr];
+		printf("Trying %s\n", filename);
 		fevdev = open(filename, O_RDONLY);
 		if (fevdev == -1) {
 			printf("Failed to open event device %s.\n", filename);
