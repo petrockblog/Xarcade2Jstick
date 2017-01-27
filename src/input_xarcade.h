@@ -35,7 +35,7 @@ typedef struct {
 	struct input_event ev[64];
 } INP_XARC_DEV;
 
-int16_t input_xarcade_open(INP_XARC_DEV* const xdev, INPUT_XARC_TYPE_E type);
+int16_t input_xarcade_open(INP_XARC_DEV* const xdev, INPUT_XARC_TYPE_E type, char* evedv);
 int16_t input_xarcade_close(INP_XARC_DEV* const xdev);
 int16_t input_xarcade_read(INP_XARC_DEV* const xdev);
 
