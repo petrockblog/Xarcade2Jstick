@@ -53,22 +53,18 @@ static void signal_handler(int signum);
 
 int main(int argc, char* argv[]) {
 	int result = 0;
-	int rd, ctr, combo = 0, use_combos = 1;
+	int rd, ctr, combo = 0;
 	char keyStates[256];
 
 	int detach = 0;
 	int opt;
-	while ((opt = getopt(argc, argv, "+dsc")) != -1) {
+	while ((opt = getopt(argc, argv, "+ds")) != -1) {
 		switch (opt) {
 			case 'd':
 				detach = 1;
 				break;
 			case 's':
 				use_syslog = 1;
-				break;
-			case 'c':
-				printf("Combos disabled\n");
-				use_combos = 0;
 				break;
 			default:
 				fprintf(stderr, "Usage: %s [-d] [-s]\n", argv[0]);
@@ -161,46 +157,12 @@ int main(int argc, char* argv[]) {
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case KEY_1:
-					if (!use_combos)
-						uinput_gpad_write(&uinp_gpads[0], BTN_START, xarcdev.ev[ctr].value > 0, EV_KEY);
-					else {
-						/* handle combination */
-						if (keyStates[KEY_3] && xarcdev.ev[ctr].value) {
-							uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
-							uinput_kbd_sleep();
-							uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
-							combo = 2;
-							continue;
-						}
-						/* it's a key down, ignore */
-						if (xarcdev.ev[ctr].value)
-							continue;
-						if (!combo) {
-							uinput_gpad_write(&uinp_gpads[0], BTN_START, 1, EV_KEY);
-							uinput_gpad_sleep();
-							uinput_gpad_write(&uinp_gpads[0], BTN_START, 0, EV_KEY);
-						} else
-							combo--;
-					}
+					uinput_gpad_write(&uinp_gpads[0], BTN_START,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case KEY_3:
-					if (!use_combos)
-						uinput_gpad_write(&uinp_gpads[0], BTN_SELECT,
-								xarcdev.ev[ctr].value > 0, EV_KEY);
-					else {
-						/* it's a key down, ignore */
-						if (xarcdev.ev[ctr].value)
-							continue;
-						if (!combo) {
-							uinput_gpad_write(&uinp_gpads[0], BTN_SELECT, 1, EV_KEY);
-							uinput_gpad_sleep();
-							uinput_gpad_write(&uinp_gpads[0], BTN_SELECT, 0, EV_KEY);
-						} else
-							combo--;
-					}
-					break;
-
-					/* joystick */
+					uinput_gpad_write(&uinp_gpads[0], BTN_SELECT,
+							xarcdev.ev[ctr].value > 0, EV_KEY);
 				case KEY_KP4:
 				case KEY_LEFT:
 					uinput_gpad_write(&uinp_gpads[0], ABS_X,
@@ -257,42 +219,35 @@ int main(int argc, char* argv[]) {
 							xarcdev.ev[ctr].value > 0, EV_KEY);
 					break;
 				case KEY_2:
-					if (!use_combos)
-						uinput_gpad_write(&uinp_gpads[1], BTN_START, xarcdev.ev[ctr].value > 0, EV_KEY);
-					else {
-						/* handle combination */
-						if (keyStates[KEY_4] && xarcdev.ev[ctr].value) {
-							uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
-							uinput_kbd_sleep();
-							uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
-							combo = 2;
-							continue;
-						}
-						/* it's a key down, ignore */
-						if (xarcdev.ev[ctr].value)
-							continue;
-						if (!combo) {
-							uinput_gpad_write(&uinp_gpads[1], BTN_START, 1, EV_KEY);
-							uinput_gpad_sleep();
-							uinput_gpad_write(&uinp_gpads[1], BTN_START, 0, EV_KEY);
-						} else
-							combo--;
+					/* handle combination */
+					if (keyStates[KEY_4] && xarcdev.ev[ctr].value) {
+						uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
+						uinput_kbd_sleep();
+						uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
+						combo = 2;
+						continue;
 					}
+					/* it's a key down, ignore */
+					if (xarcdev.ev[ctr].value)
+						continue;
+					if (!combo) {
+						uinput_gpad_write(&uinp_gpads[1], BTN_START, 1, EV_KEY);
+						uinput_gpad_sleep();
+						uinput_gpad_write(&uinp_gpads[1], BTN_START, 0, EV_KEY);
+					} else
+						combo--;
 					break;
 				case KEY_4:
-					if (!use_combos)
-						uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, xarcdev.ev[ctr].value > 0, EV_KEY);
-					else {
-						/* it's a key down, ignore */
-						if (xarcdev.ev[ctr].value)
-							continue;
-						if (!combo) {
-							uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, 1, EV_KEY);
-							uinput_gpad_sleep();
-							uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, 0, EV_KEY);
-						} else
-							combo--;
-					}
+					/* it's a key down, ignore */
+					if (xarcdev.ev[ctr].value)
+						continue;
+					if (!combo) {
+						uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, 1, EV_KEY);
+						uinput_gpad_sleep();
+						uinput_gpad_write(&uinp_gpads[1], BTN_SELECT, 0, EV_KEY);
+					} else
+						combo--;
+
 					break;
 
 					/* joystick */
