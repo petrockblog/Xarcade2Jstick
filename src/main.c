@@ -163,6 +163,7 @@ int main(int argc, char* argv[]) {
 				case KEY_3:
 					uinput_gpad_write(&uinp_gpads[0], BTN_SELECT,
 							xarcdev.ev[ctr].value > 0, EV_KEY);
+					break;
 				case KEY_KP4:
 				case KEY_LEFT:
 					uinput_gpad_write(&uinp_gpads[0], ABS_X,
