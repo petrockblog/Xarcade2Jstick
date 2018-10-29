@@ -126,7 +126,6 @@ int16_t uinput_gpad_write(UINP_GPAD_DEV* const gpad, uint16_t keycode,
 	event.type = EV_SYN;
 	event.code = SYN_REPORT;
 	event.value = 0;
-	write(gpad->fd, &event, sizeof(event));
 	if (write(gpad->fd, &event, sizeof(event)) < 0) {
 		printf("[uinput_gamepad] Simulate key error\n");
 	}
