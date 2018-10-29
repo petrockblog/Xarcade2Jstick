@@ -52,7 +52,6 @@ static void teardown();
 static void signal_handler(int signum);
 
 int main(int argc, char* argv[]) {
-	int result = 0;
 	int rd, ctr, combo = 0;
 	char keyStates[256];
 
@@ -76,8 +75,8 @@ int main(int argc, char* argv[]) {
 	SYSLOG(LOG_NOTICE, "Starting.");
 
 	printf("[Xarcade2Joystick] Getting exclusive access: ");
-	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
-	if (result != 0) {
+	int retry_time=3;
+	while ( input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK) != 0) {
 		if (errno == 0) {
 			printf("Not found.\n");
 			SYSLOG(LOG_ERR, "Xarcade not found, exiting.");
@@ -85,7 +84,10 @@ int main(int argc, char* argv[]) {
 			printf("Failed to get exclusive access to Xarcade: %d (%s)\n", errno, strerror(errno));
 			SYSLOG(LOG_ERR, "Failed to get exclusive access to Xarcade, exiting: %d (%s)", errno, strerror(errno));
 		}
-		exit(EXIT_FAILURE);
+		printf("Retrying in %ds.\n", retry_time);
+		sleep( retry_time );
+		retry_time *= 2;
+		if (retry_time>30) retry_time=30;
 	}
 
 	SYSLOG(LOG_NOTICE, "Got exclusive access to Xarcade.");
