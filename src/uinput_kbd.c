@@ -29,7 +29,7 @@
 int16_t uinput_kbd_open(UINP_KBD_DEV* const kbd) {
 	kbd->fd = open("/dev/uinput", O_WRONLY | O_NDELAY);
 	if (kbd->fd == 0) {
-		printf("Unable to open /dev/uinput\n");
+		printf("Unable to open /dev/uinput (running as root may help)\n");
 		return -1;
 	}
 
