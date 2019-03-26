@@ -13,7 +13,7 @@
 /*  along with this program; if not, write to the Free Software             */
 /*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               */
 /* ======================================================================== */
-/*                 Copyright (c) 2014, Florian Mueller                      */
+/*                 Copyright (c) 2014-2019, Florian Mueller                 */
 /* ======================================================================== */
 
 #include <stdio.h>
