@@ -1,2 +1,4 @@
 build/
 src/xarcade2jstick
+.idea/
+cmake-build-debug/
