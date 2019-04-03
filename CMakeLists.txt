@@ -12,7 +12,7 @@ set(EXECUTABLE_NAME "xarcade2jstick")
 add_executable(${EXECUTABLE_NAME} "src/main.c")
 target_link_libraries(${EXECUTABLE_NAME} xarcade2jstick-lib)
 
-install(FILES ${CMAKE_BINARY_DIR}/${EXECUTABLE_NAME} DESTINATION /usr/bin
+install(FILES ${CMAKE_BINARY_DIR}/${EXECUTABLE_NAME} DESTINATION /usr/local/bin
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
         GROUP_EXECUTE GROUP_READ
         )
