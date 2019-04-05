@@ -54,7 +54,7 @@ int16_t uinput_kbd_open(UINP_KBD_DEV* const kbd) {
 	/* Create input device into input sub-system */
 	write(kbd->fd, &uinp, sizeof(uinp));
 	if (ioctl(kbd->fd, UI_DEV_CREATE)) {
-		printf("[SNESDev-Rpi] Unable to create UINPUT device.");
+		printf("[xarcade2jstick] Unable to create UINPUT device.");
 		return -1;
 	}
 
@@ -85,7 +85,7 @@ int16_t uinput_kbd_write(UINP_KBD_DEV* const kbd, unsigned int keycode,
 	event.value = 0;
 	write(kbd->fd, &event, sizeof(event));
 	if (write(kbd->fd, &event, sizeof(event)) < 0) {
-		printf("[SNESDev-Rpi] Simulate key error\n");
+		printf("[xarcade2jstick] Simulate key error\n");
 	}
 	return 0;
 }
