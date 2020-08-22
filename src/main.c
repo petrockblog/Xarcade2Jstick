@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 	int result = 0;
 	int rd, ctr, combo = 0;
 	char keyStates[256];
-	memset(keyStates, 0, 256);
+	memset(keyStates, 0, sizeof(keyStates));
 	int detach = 0;
 	int opt;
 	while ((opt = getopt(argc, argv, "+ds")) != -1) {
