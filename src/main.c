@@ -13,7 +13,7 @@
 /*  along with this program; if not, write to the Free Software             */
 /*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               */
 /* ======================================================================== */
-/*                 Copyright (c) 2014, Florian Mueller                      */
+/*                 Copyright (c) 2014-2019, Florian Mueller                 */
 /* ======================================================================== */
 
 #include <stdio.h>
@@ -51,9 +51,16 @@ int use_syslog = 0;
 static void teardown();
 static void signal_handler(int signum);
 
+void outputKeyPress(short keyPad, int keyCode, int state) {
+	 uinput_gpad_write(&uinp_gpads[ keyPad ], keyCode, state, EV_KEY);
+}
+
+void outputAxisChange(short keyPad, int axisCode, int value) {
+	 uinput_gpad_write(&uinp_gpads[ keyPad ], axisCode, value, EV_ABS);
+}
+
 int main(int argc, char* argv[]) {
-	int result = 0;
-	int rd, ctr, combo = 0;
+	int rd, ctr, comboP1, comboP2 = 0;
 	char keyStates[256];
 	memset(keyStates, 0, sizeof(keyStates));
 	int detach = 0;
@@ -76,8 +83,8 @@ int main(int argc, char* argv[]) {
 	SYSLOG(LOG_NOTICE, "Starting.");
 
 	printf("[Xarcade2Joystick] Getting exclusive access: ");
-	result = input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK);
-	if (result != 0) {
+	int retry_time=3;
+	while ( input_xarcade_open(&xarcdev, INPUT_XARC_TYPE_TANKSTICK) != 0) {
 		if (errno == 0) {
 			printf("Not found.\n");
 			SYSLOG(LOG_ERR, "Xarcade not found, exiting.");
@@ -85,7 +92,10 @@ int main(int argc, char* argv[]) {
 			printf("Failed to get exclusive access to Xarcade: %d (%s)\n", errno, strerror(errno));
 			SYSLOG(LOG_ERR, "Failed to get exclusive access to Xarcade, exiting: %d (%s)", errno, strerror(errno));
 		}
-		exit(EXIT_FAILURE);
+		printf("Retrying in %ds.\n", retry_time);
+		sleep( retry_time );
+		retry_time *= 2;
+		if (retry_time>30) retry_time=30;
 	}
 
 	SYSLOG(LOG_NOTICE, "Got exclusive access to Xarcade.");
@@ -120,6 +130,8 @@ int main(int argc, char* argv[]) {
 
 				keyStates[xarcdev.ev[ctr].code] = xarcdev.ev[ctr].value;
 
+				int value = xarcdev.ev[ctr].value;
+				int isPressed = value > 0;
 				switch (xarcdev.ev[ctr].code) {
 
 				/* ----------------  Player 1 controls ------------------- */
@@ -128,92 +140,71 @@ int main(int argc, char* argv[]) {
 					/* P1Start + P1Button0 = P1Select */
 					if (keyStates[KEY_1])
 					{
-						uinput_gpad_write(&uinp_gpads[0], BTN_SELECT,
-								xarcdev.ev[ctr].value > 0, EV_KEY);
-						combo = 1;
+						outputKeyPress(0,BTN_SELECT, isPressed);
+						comboP1 = 1;
 					}
 					else
 					{
-						uinput_gpad_write(&uinp_gpads[0], BTN_A,
-								xarcdev.ev[ctr].value > 0, EV_KEY);
+
+						outputKeyPress(0,BTN_A, isPressed);
 					}
 					break;
 				case KEY_LEFTALT:
-					uinput_gpad_write(&uinp_gpads[0], BTN_B,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(0,BTN_B, isPressed);
 					break;
 				case KEY_SPACE:
-					uinput_gpad_write(&uinp_gpads[0], BTN_C,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(0,BTN_C, isPressed);
 					break;
 				case KEY_LEFTSHIFT:
-					uinput_gpad_write(&uinp_gpads[0], BTN_X,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(0,BTN_X, isPressed);
 					break;
 				case KEY_Z:
-					uinput_gpad_write(&uinp_gpads[0], BTN_Y,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(0,BTN_Y, isPressed);
 					break;
 				case KEY_X:
-					uinput_gpad_write(&uinp_gpads[0], BTN_Z,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(0,BTN_Z, isPressed);
 					break;
 				case KEY_C:
-					uinput_gpad_write(&uinp_gpads[0], BTN_TL,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(0,BTN_TL, isPressed);
 					break;
 				case KEY_5:
-					uinput_gpad_write(&uinp_gpads[0], BTN_TR,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(0,BTN_TR, isPressed);
 					break;
 				case KEY_1:
-					/* it's a key down, ignore */
-					if (xarcdev.ev[ctr].value)
+					/* Do nothing on key down because it could be a combo */
+					if (isPressed)
 						continue;
 
-					if (!combo)
+					/* Ensure P1Select is released it could get stuck if start is released before BTN_A */
+					outputKeyPress(0,BTN_SELECT, 0);
+
+					if (!comboP1)
 					{
-						uinput_gpad_write(&uinp_gpads[0], BTN_START, 1, EV_KEY);
+						outputKeyPress(0,BTN_START, 1);
 						uinput_gpad_sleep();
-						uinput_gpad_write(&uinp_gpads[0], BTN_START, 0, EV_KEY);
+						outputKeyPress(0,BTN_START, 0);
 					}
 					else
-						combo = 0;
+						comboP1 = 0;
 					break;
 				case KEY_3:
-					uinput_gpad_write(&uinp_gpads[0], BTN_SELECT,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(0,BTN_SELECT, isPressed);
 					break;
 				case KEY_KP4:
 				case KEY_LEFT:
-					uinput_gpad_write(&uinp_gpads[0], ABS_X,
-							xarcdev.ev[ctr].value == 0 ? 2 : 0, EV_ABS); // center or left
+					outputAxisChange(0,ABS_X, value == 0 ? 2 : 0); // center or left
 					break;
 				case KEY_KP6:
 				case KEY_RIGHT:
-					/* P1Start + P1Right = TAB */
-					if (keyStates[KEY_1] && !combo)
-					{
-						uinput_kbd_write(&uinp_kbd, KEY_TAB, 1, EV_KEY);
-						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_TAB, 0, EV_KEY);
-						combo = 1;
-					}
-					else
-					{
-						uinput_gpad_write(&uinp_gpads[0], ABS_X,
-								xarcdev.ev[ctr].value == 0 ? 2 : 4, EV_ABS); // center or right
-					}
+					outputAxisChange(0,ABS_X,	value == 0 ? 2 : 4); // center or right
 					break;
 				case KEY_KP8:
 				case KEY_UP:
-					uinput_gpad_write(&uinp_gpads[0], ABS_Y,
-							xarcdev.ev[ctr].value == 0 ? 2 : 0, EV_ABS); // center or up
+					outputAxisChange(0,ABS_Y,	value == 0 ? 2 : 0); // center or up
 					break;
 				case KEY_KP2:
 				case KEY_DOWN:
-					uinput_gpad_write(&uinp_gpads[0], ABS_Y,
-							xarcdev.ev[ctr].value == 0 ? 2 : 4, EV_ABS); // center or down
+					outputAxisChange(0,ABS_Y,	value == 0 ? 2 : 4); // center or down
 					break;
 
 					/* ----------------  Player 2 controls ------------------- */
@@ -222,89 +213,78 @@ int main(int argc, char* argv[]) {
 					/* P2Start + P2Button0 = P2Select */
 					if (keyStates[KEY_2])
 					{
-						uinput_gpad_write(&uinp_gpads[1], BTN_SELECT,
-								xarcdev.ev[ctr].value > 0, EV_KEY);
-						combo = 1;
+						outputKeyPress(1,BTN_SELECT, isPressed);
+						comboP2 = 1;
 					}
 					else
 					{
-						uinput_gpad_write(&uinp_gpads[1], BTN_A,
-								xarcdev.ev[ctr].value > 0, EV_KEY);
+
+						outputKeyPress(1,BTN_A, isPressed);
 					}
 					break;
 				case KEY_S:
-					uinput_gpad_write(&uinp_gpads[1], BTN_B,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(1,BTN_B, isPressed);
 					break;
 				case KEY_Q:
-					uinput_gpad_write(&uinp_gpads[1], BTN_C,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(1,BTN_C, isPressed);
 					break;
 				case KEY_W:
-					uinput_gpad_write(&uinp_gpads[1], BTN_X,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(1,BTN_X, isPressed);
 					break;
 				case KEY_E:
-					uinput_gpad_write(&uinp_gpads[1], BTN_Y,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(1,BTN_Y, isPressed);
 					break;
 				case KEY_LEFTBRACE:
-					uinput_gpad_write(&uinp_gpads[1], BTN_Z,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(1,BTN_Z, isPressed);
 					break;
 				case KEY_RIGHTBRACE:
-					uinput_gpad_write(&uinp_gpads[1], BTN_TL,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(1,BTN_TL, isPressed);
 					break;
 				case KEY_6:
-					uinput_gpad_write(&uinp_gpads[1], BTN_TR,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(1,BTN_TR, isPressed);
 					break;
 				case KEY_2:
-
 					/* P1Start + P2Start = ESC */
-					if (keyStates[KEY_1] && xarcdev.ev[ctr].value) {
-						uinput_kbd_write(&uinp_kbd, KEY_ESC, 1, EV_KEY);
-						uinput_kbd_sleep();
-						uinput_kbd_write(&uinp_kbd, KEY_ESC, 0, EV_KEY);
-						combo = 1;
-						continue;
-					}
-
-					/* it's a key down, ignore */
-					if (xarcdev.ev[ctr].value)
-						continue;
-
-					if(!combo)
+					if (keyStates[KEY_1])
 					{
-						uinput_gpad_write(&uinp_gpads[1], BTN_START, 1, EV_KEY);
-						uinput_gpad_sleep();
-						uinput_gpad_write(&uinp_gpads[1], BTN_START, 0, EV_KEY);
+						uinput_kbd_write(&uinp_kbd, KEY_ESC, isPressed, EV_KEY);
+						comboP1 = 1;
 					}
 					else
-						combo = 0;
+					{
+						/* Do nothing on key down because it could be a combo */
+						if (isPressed)
+							continue;
+
+						/* Ensure P2Select is released it could get stuck if start is released before BTN_A */
+						outputKeyPress(1,BTN_SELECT, 0);
+
+						if (!comboP2)
+						{
+							outputKeyPress(1,BTN_START, 1);
+							uinput_gpad_sleep();
+							outputKeyPress(1,BTN_START, 0);
+						}
+						else
+							comboP2 = 0;
+					}
 					break;
 				case KEY_4:
-					uinput_gpad_write(&uinp_gpads[1], BTN_SELECT,
-							xarcdev.ev[ctr].value > 0, EV_KEY);
+					outputKeyPress(1,BTN_SELECT, isPressed);
 					break;
 
 					/* joystick */
 				case KEY_D:
-					uinput_gpad_write(&uinp_gpads[1], ABS_X,
-							xarcdev.ev[ctr].value == 0 ? 2 : 0, EV_ABS); // center or left
+					outputAxisChange(1,ABS_X, value == 0 ? 2 : 0); // center or left
 					break;
 				case KEY_G:
-					uinput_gpad_write(&uinp_gpads[1], ABS_X,
-							xarcdev.ev[ctr].value == 0 ? 2 : 4, EV_ABS); // center or right
+					outputAxisChange(1,ABS_X, value == 0 ? 2 : 4); // center or right
 					break;
 				case KEY_R:
-					uinput_gpad_write(&uinp_gpads[1], ABS_Y,
-							xarcdev.ev[ctr].value == 0 ? 2 : 0, EV_ABS); // center or up
+					outputAxisChange(1,ABS_Y, value == 0 ? 2 : 0); // center or up
 					break;
 				case KEY_F:
-					uinput_gpad_write(&uinp_gpads[1], ABS_Y,
-							xarcdev.ev[ctr].value == 0 ? 2 : 4, EV_ABS); // center or down
+					outputAxisChange(1,ABS_Y,value == 0 ? 2 : 4); // center or down
 					break;
 
 				default:
