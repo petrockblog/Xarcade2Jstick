@@ -9,10 +9,12 @@ _Xarcade2Jstick_ was originally written as a supplementary tool for the [RetroPi
 
 Your Xarcade will appear as two gamepads and can be used accordingly. There are also some special combinations of buttons that have special meaning:
 
-* P1 select + P1 start = TAB
-* P2 select + P2 start = ESC
+* P1 Start + P1 Button0 = P1 Select (coin 1)
+* P2 Start + P2 Button0 = P2 Select (coin 2)
+* P1 Start + P2 Start = ESC (exit game)
+* P1 Start + P1 Right = TAB (toggle MAME menu)
 
-The select buttons are the front buttons on each side of the joystick. The start buttons are the white top-center buttons.
+The start buttons are the white top-center buttons.
 
 ## Downloading
 
