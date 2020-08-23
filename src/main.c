@@ -145,7 +145,6 @@ int main(int argc, char* argv[]) {
 					}
 					else
 					{
-
 						outputKeyPress(0,BTN_A, isPressed);
 					}
 					break;
@@ -175,9 +174,6 @@ int main(int argc, char* argv[]) {
 					if (isPressed)
 						continue;
 
-					/* Ensure P1Select is released it could get stuck if start is released before BTN_A */
-					outputKeyPress(0,BTN_SELECT, 0);
-
 					if (!comboP1)
 					{
 						outputKeyPress(0,BTN_START, 1);
@@ -185,7 +181,11 @@ int main(int argc, char* argv[]) {
 						outputKeyPress(0,BTN_START, 0);
 					}
 					else
+					{
+						/* Ensure P1Select is released it could get stuck if start is released before BTN_A */
+						outputKeyPress(0,BTN_SELECT, 0);
 						comboP1 = 0;
+					}
 					break;
 				case KEY_3:
 					outputKeyPress(0,BTN_SELECT, isPressed);
@@ -196,7 +196,16 @@ int main(int argc, char* argv[]) {
 					break;
 				case KEY_KP6:
 				case KEY_RIGHT:
-					outputAxisChange(0,ABS_X,	value == 0 ? 2 : 4); // center or right
+					/* P1Start + P1Right = Tab */
+					if (keyStates[KEY_1])
+					{
+						uinput_kbd_write(&uinp_kbd, KEY_TAB, isPressed, EV_KEY);
+						comboP1 = 1;
+					}
+					else
+					{
+						outputAxisChange(0,ABS_X,	value == 0 ? 2 : 4); // center or right
+					}
 					break;
 				case KEY_KP8:
 				case KEY_UP:
@@ -256,9 +265,6 @@ int main(int argc, char* argv[]) {
 						if (isPressed)
 							continue;
 
-						/* Ensure P2Select is released it could get stuck if start is released before BTN_A */
-						outputKeyPress(1,BTN_SELECT, 0);
-
 						if (!comboP2)
 						{
 							outputKeyPress(1,BTN_START, 1);
@@ -266,7 +272,11 @@ int main(int argc, char* argv[]) {
 							outputKeyPress(1,BTN_START, 0);
 						}
 						else
+						{
+							/* Ensure P2Select is released it could get stuck if start is released before BTN_A */
+							outputKeyPress(1,BTN_SELECT, 0);
 							comboP2 = 0;
+						}
 					}
 					break;
 				case KEY_4:
