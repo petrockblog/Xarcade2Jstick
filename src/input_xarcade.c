@@ -81,8 +81,9 @@ int findXarcadeDevice(void) {
 
 		ioctl(fevdev, EVIOCGNAME(sizeof(name)), name);
 		if ((strcmp(name, "XGaming X-Arcade") == 0)
-            || (strcmp(name, "Xgaming  X-Arcade") == 0)
-            || (strcmp(name, "XGaming X-Arcade 2") == 0)
+		    || (strcmp(name, "XGaming X-Arcade 2") == 0)
+        || (strcmp(name, "Xgaming  X-Arcade") == 0)
+        || (strcmp(name, "XGaming X-Arcade 2") == 0)
 		    || (strcmp(name, "Ultimarc") == 0)
 		    || (strcmp(name, "XGaming USBAdapter") == 0)) {
 			printf("Found %s (%s)\n", filename, name);
