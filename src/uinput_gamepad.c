@@ -54,7 +54,7 @@ int16_t uinput_gpad_open(UINP_GPAD_DEV* const gpad, UINPUT_GPAD_TYPE_E type,
 	int16_t uinp_fd = -1;
 	gpad->fd = open("/dev/uinput", O_WRONLY | O_NDELAY);
 	if (gpad->fd <= 0) {
-		printf("Unable to open /dev/uinput\n");
+		printf("Unable to open /dev/uinput (running as root may help)\n");
 		return -1;
 	}
 
@@ -126,7 +126,6 @@ int16_t uinput_gpad_write(UINP_GPAD_DEV* const gpad, uint16_t keycode,
 	event.type = EV_SYN;
 	event.code = SYN_REPORT;
 	event.value = 0;
-	write(gpad->fd, &event, sizeof(event));
 	if (write(gpad->fd, &event, sizeof(event)) < 0) {
 		printf("[uinput_gamepad] Simulate key error\n");
 	}
